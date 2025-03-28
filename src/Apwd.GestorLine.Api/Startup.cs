@@ -1,54 +1,53 @@
 ﻿using Apwd.GestorLine.Ioc.Extensions.v1;
 using Microsoft.OpenApi.Models;
 
-namespace Apwd.GestorLine.Api
+namespace Apwd.GestorLine.Api;
+
+public class Startup
 {
-    public class Startup
+    public Startup(IConfiguration configuration)
     {
-        public Startup(IConfiguration configuration)
+        Configuration = configuration;
+    }
+
+    public IConfiguration Configuration { get; }
+
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddServiceContext();
+        services.AddRepositoryContext();
+        services.AddMappingContext();
+        services.AddCors();
+        services.AddControllers();
+        services.AddSwaggerGen(c =>
         {
-            Configuration = configuration;
-        }
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Apwd.GestorLine.Api", Version = "v1" });
+        });
+    }
 
-        public IConfiguration Configuration { get; }
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        app.UseRouting();
 
-        public void ConfigureServices(IServiceCollection services)
+        app.UseCors(x => x
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .SetIsOriginAllowed(origin => true)
+            .AllowCredentials());
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        app.UseEndpoints(endpoints =>
         {
-            services.AddServiceContext();
-            services.AddRepositoryContext();
-            services.AddMappingContext();
-            services.AddCors();
-            services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Apwd.GestorLine.Api", Version = "v1" });
-            });
-        }
+            endpoints.MapControllers();
+        });
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        if (env.IsDevelopment())
         {
-            app.UseRouting();
-
-            app.UseCors(x => x
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .SetIsOriginAllowed(origin => true)
-                .AllowCredentials());
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Apw.LineCore.Api v1"));
-            }
+            app.UseDeveloperExceptionPage();
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Apwd.GestorLine.Api v1"));
         }
     }
 }

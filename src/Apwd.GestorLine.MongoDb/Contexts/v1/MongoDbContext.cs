@@ -2,61 +2,60 @@
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 
-namespace Apwd.GestorLine.MongoDb.Contexts.v1
+namespace Apwd.GestorLine.MongoDb.Contexts.v1;
+
+public class MongoDbContext : IMongoDbContext
 {
-    public class MongoDbContext : IMongoDbContext
+    private IMongoDatabase Database { get; set; }
+    public IClientSessionHandle Session { get; set; }
+    public MongoClient MongoClient { get; set; }
+
+    private readonly IConfiguration _configutarion;
+    private readonly List<Func<Task>> _commands;
+
+    public MongoDbContext(IConfiguration configuration)
     {
-        private IMongoDatabase Database { get; set; }
-        public IClientSessionHandle Session { get; set; }
-        public MongoClient MongoClient { get; set; }
+        _configutarion = configuration;
+        _commands = new List<Func<Task>>();
+    }
 
-        private readonly IConfiguration _configutarion;
-        private readonly List<Func<Task>> _commands;
+    public async Task<int> SaveChanges()
+    {
+        ConfigureMongo();
 
-        public MongoDbContext(IConfiguration configuration)
+        using (Session = await MongoClient.StartSessionAsync())
         {
-            _configutarion = configuration;
-            _commands = new List<Func<Task>>();
+            Session.StartTransaction();
+
+            var commandTasks = _commands.Select(func => func());
+
+            await Task.WhenAll(commandTasks);
+
+            await Session.CommitTransactionAsync();
         }
 
-        public async Task<int> SaveChanges()
-        {
-            ConfigureMongo();
+        return _commands.Count;
+    }
 
-            using (Session = await MongoClient.StartSessionAsync())
-            {
-                Session.StartTransaction();
+    public IMongoCollection<T> GetCollection<T>(string name)
+    {
+        ConfigureMongo();
+        return Database.GetCollection<T>(name);
+    }
 
-                var commandTasks = _commands.Select(func => func());
+    public void AddCommand(Func<Task> func) => _commands.Add(func);
 
-                await Task.WhenAll(commandTasks);
+    public void Dispose()
+    {
+        Session?.Dispose();
+        GC.SuppressFinalize(this);
+    }
 
-                await Session.CommitTransactionAsync();
-            }
+    private void ConfigureMongo()
+    {
+        if (MongoClient != default) return;
 
-            return _commands.Count;
-        }
-
-        public IMongoCollection<T> GetCollection<T>(string name)
-        {
-            ConfigureMongo();
-            return Database.GetCollection<T>(name);
-        }
-
-        public void AddCommand(Func<Task> func) => _commands.Add(func);
-
-        public void Dispose()
-        {
-            Session?.Dispose();
-            GC.SuppressFinalize(this);
-        }
-
-        private void ConfigureMongo()
-        {
-            if (MongoClient != default) return;
-
-            MongoClient = new MongoClient(_configutarion["MongoSettings:Connection"]);
-            Database = MongoClient.GetDatabase(_configutarion["MongoSettings:DatabaseName"]);
-        }
+        MongoClient = new MongoClient(_configutarion["MongoSettings:Connection"]);
+        Database = MongoClient.GetDatabase(_configutarion["MongoSettings:DatabaseName"]);
     }
 }

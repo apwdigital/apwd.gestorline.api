@@ -1,8 +1,7 @@
-﻿namespace Apwd.GestorLine.Domain.Models.v1.System
+﻿namespace Apwd.GestorLine.Domain.Models.v1.System;
+
+public class UserLoginModel
 {
-    public class UserLoginModel
-    {
-        public required string UserName { get; set; }
-        public required string UserCode { get; set; }
-    }
+    public required string UserName { get; set; }
+    public required string UserCode { get; set; }
 }

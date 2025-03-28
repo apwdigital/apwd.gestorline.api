@@ -1,7 +1,6 @@
-﻿namespace Apwd.GestorLine.MongoDb.Contracts.v1.System
+﻿namespace Apwd.GestorLine.MongoDb.Contracts.v1.System;
+
+public interface IUnitOfWork : IDisposable
 {
-    public interface IUnitOfWork : IDisposable
-    {
-        Task<bool> CommitAsync();
-    }
+    Task<bool> CommitAsync();
 }

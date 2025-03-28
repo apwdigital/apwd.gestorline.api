@@ -1,7 +1,6 @@
-﻿namespace Apwd.GestorLine.Domain.Models.v1.System
+﻿namespace Apwd.GestorLine.Domain.Models.v1.System;
+
+public class UserModel : AddUserModel
 {
-    public class UserModel : AddUserModel
-    {
-        public Guid Id { get; set; }
-    }
+    public Guid Id { get; set; }
 }
