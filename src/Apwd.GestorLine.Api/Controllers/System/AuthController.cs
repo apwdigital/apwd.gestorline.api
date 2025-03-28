@@ -1,4 +1,6 @@
-﻿using Apwd.GestorLine.Domain.Models.v1.System;
+﻿using Apwd.GestorLine.Api.Helpers.v1;
+using Apwd.GestorLine.Api.Services.v1;
+using Apwd.GestorLine.Domain.Models.v1.System;
 using Apwd.GestorLine.Services.Contracts.v1.System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -33,7 +35,7 @@ public class AuthController : ControllerBase
         if (user == null)
             return NotFound(new { message = "Usuário ou senha inválidos" });
 
-        var token = "XPTO001";
+        var token = TokenService.GenerateToken(user);
 
         var createdDate = DateTime.Now;
 
@@ -42,9 +44,9 @@ public class AuthController : ControllerBase
         return new
         {
             username = user.UserName,
-            CompanyCode = user.CompanyCode,
+            companyCode = user.CompanyCode,
             siteCodeInformation = user.Id,
-            siteCodeValidation = string.Empty, //AppHelper.GetAccountLevelCode(user.AccountLevel),
+            siteCodeValidation = AppHelper.GetAccountLevelCode(user.AccountLevel),
             appVersion = "V25.3.27",
             token,
             createdDate,
