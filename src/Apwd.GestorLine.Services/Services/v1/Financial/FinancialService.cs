@@ -41,6 +41,9 @@ public class FinancialService : IFinancialService
 
         foreach (var item in repositoryResponse)
         {
+            item.EmittentDate = Convert.ToDateTime(item.EmittentDate).ToString("yyyy-MM-dd");
+            item.DueDate = Convert.ToDateTime(item.DueDate).ToString("yyyy-MM-dd");
+            item.PayDate = Convert.ToDateTime(item.PayDate).ToString("yyyy-MM-dd");
             balance = balance + item.Amount;
             item.Balance = balance;
         }
@@ -75,6 +78,7 @@ public class FinancialService : IFinancialService
             var objToAdd = _mapper.Map<Domain.Entities.v1.Financial.Financial>(request);
             objToAdd.Id = Guid.NewGuid().ToString();
             objToAdd.DueDate = new DateTime(objToAdd.DueDate.Year, objToAdd.DueDate.Month, objToAdd.DueDate.Day, 3, 0, 0);
+            objToAdd.EmittentDate = new DateTime(objToAdd.EmittentDate.Year, objToAdd.EmittentDate.Month, objToAdd.EmittentDate.Day, 3, 0, 0);
             objToAdd.DueDateCode = Convert.ToInt32($"{request.DueDate.Year}{request.DueDate.Month.ToString().PadLeft(2, '0')}");
             objToAdd.ChangedAt = objToAdd.CreatedAt;
 
@@ -128,7 +132,6 @@ public class FinancialService : IFinancialService
 
     public async Task<int> Delete(string id)
     {
-
         await _financialRepository.DeleteAsync(id);
         await _unitOfWork.CommitAsync();
         return 200;
@@ -139,7 +142,7 @@ public class FinancialService : IFinancialService
         var objToAdd = _mapper.Map<Domain.Entities.v1.Financial.Financial>(financialData);
 
         objToAdd.Id = Guid.NewGuid().ToString();
-        objToAdd.DueDate = financialData.DueDate;
+        objToAdd.DueDate = Convert.ToDateTime(financialData.DueDate);
         objToAdd.PayDate = null;
         objToAdd.PlanningType = "P";
         objToAdd.DocumentNumber = string.Empty;
@@ -208,7 +211,7 @@ public class FinancialService : IFinancialService
     public async Task<FinancialGetInfoResponse> AddInfoAsync(FinancialInfoPostRequest request)
     {
         var objToAdd = _mapper.Map<FinancialInfo>(request);
-        //objToAdd.Id = Guid.NewGuid().ToString();
+        objToAdd.Id = Guid.NewGuid().ToString();
         await _financialInfoRepository.AddAsync(objToAdd);
         await _unitOfWork.CommitAsync();
         return _mapper.Map<FinancialGetInfoResponse>(objToAdd);

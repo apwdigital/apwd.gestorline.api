@@ -23,5 +23,6 @@ public class Financial : BaseEntity
     public required string PlanningType { get; set; }
     public string? Comments { get; set; }
     public int Sequence { get; set; }
+    public string? LoteCode { get; set; }
     public string? Tag { get; set; }
 }

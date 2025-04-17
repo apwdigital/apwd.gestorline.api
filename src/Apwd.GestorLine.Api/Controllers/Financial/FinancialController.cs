@@ -37,7 +37,11 @@ public class FinancialController : ControllerBase
             return NotFound();
     }
 
-    [HttpPut("{id:guid}")]
+    [HttpPost]
+    public async Task<FinancialResponse> Add(FinancialPostRequest request)
+        => await _financialService.Add(request);
+
+    [HttpPatch("{id:guid}")]
     public async Task<int> Update(string id, FinancialPutRequest request)
     {
         var objToUpdate = await _financialService.GetById(id);
@@ -48,6 +52,20 @@ public class FinancialController : ControllerBase
             return 404;
     }
 
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete(string id)
+    {
+        var objToDelete = await _financialService.GetById(id);
+
+        if (objToDelete != null)
+        {
+            await _financialService.Delete(id);
+            return Ok();
+        }
+        else
+            return NotFound();
+    }
+
     [HttpGet("info/{CompanyCode}")]
     public async Task<FinancialGetInfoResponse> GetInfo(string CompanyCode)
        => await _financialService.GetInfoAsync(CompanyCode);
@@ -55,8 +73,4 @@ public class FinancialController : ControllerBase
     [HttpPost("info")]
     public async Task<FinancialGetInfoResponse> AddInfo(FinancialInfoPostRequest request)
        => await _financialService.AddInfoAsync(request);
-
-    [HttpPost]
-    public async Task<FinancialResponse> Add(FinancialPostRequest request)
-        => await _financialService.Add(request);
 }

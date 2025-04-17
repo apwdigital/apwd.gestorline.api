@@ -3,8 +3,8 @@
 public class SearchFilterModel
 {
     public string? CompanyCode { get; set; }
-    public SearchFilterModel(string CompanyCode)
+    public SearchFilterModel(string companyCode)
     {
-        CompanyCode = CompanyCode;
+        CompanyCode = companyCode;
     }
 }

@@ -12,8 +12,8 @@ public class InfoController : ControllerBase
         await Task.Delay(1);
         return new
         {
-            appVersion = "20250327-001",
-            lastFeatureUpdate = "GestorLine.Api",
+            appVersion = "20250417-001",
+            lastFeatureUpdate = "Apwd.GestorLine.Api",
             localDateTime = DateTime.Now.ToString()
         };
     }

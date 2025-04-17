@@ -17,12 +17,13 @@ public class FinancialResponse
     public decimal Balance { get; set; }
     public string? DocumentNumber { get; set; }
     public required string Description { get; set; }
-    public DateTime EmittentDate { get; set; }
-    public DateTime DueDate { get; set; }
-    public DateTime? PayDate { get; set; }
+    public required string EmittentDate { get; set; }
+    public required string DueDate { get; set; }
+    public string? PayDate { get; set; }
     public required string PlanningType { get; set; }
     public string? Comments { get; set; }
     public int Sequence { get; set; }
     public DateTime? ChangedAt { get; set; }
     public string? Tag { get; set; }
+    public string? LoteCode { get; set; }
 }

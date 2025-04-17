@@ -23,4 +23,5 @@ public class FinancialPostRequest
     public int Sequence { get; set; }
     public DateTime? ChangedAt { get; set; }
     public string? Tag { get; set; }
+    public string? LoteCode { get; set; }
 }
