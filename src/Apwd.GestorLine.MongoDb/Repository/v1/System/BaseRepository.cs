@@ -46,7 +46,7 @@ public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where T
 
     public virtual async Task UpdateAsync(TEntity obj)
     {
-        Context.AddCommand(() => DbSet.ReplaceOneAsync(Builders<TEntity>.Filter.Eq("_id", obj. GetId()), obj));
+        Context.AddCommand(() => DbSet.ReplaceOneAsync(Builders<TEntity>.Filter.Eq("_id", obj.GetId()), obj));
     }
 
     public virtual async Task<IEnumerable<TEntity>> GetByFilterAsync(SearchFilterModel filter)

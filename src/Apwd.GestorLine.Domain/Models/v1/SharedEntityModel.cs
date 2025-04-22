@@ -3,5 +3,6 @@
 public class SharedEntityModel
 {
     public required string Code { get; set; }
+    public string? Type { get; set; }
     public required string Description { get; set; }
 }

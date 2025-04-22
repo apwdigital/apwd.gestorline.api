@@ -82,6 +82,9 @@ public class FinancialService : IFinancialService
             objToAdd.DueDateCode = Convert.ToInt32($"{request.DueDate.Year}{request.DueDate.Month.ToString().PadLeft(2, '0')}");
             objToAdd.ChangedAt = objToAdd.CreatedAt;
 
+            if ((objToAdd.Type == "D" || objToAdd.Type == "C") && objToAdd.Amount > 0)
+                objToAdd.Amount = objToAdd.Amount * -1;
+
             await _financialRepository.AddAsync(objToAdd);
             await _unitOfWork.CommitAsync();
             return _mapper.Map<FinancialResponse>(objToAdd);
@@ -102,6 +105,9 @@ public class FinancialService : IFinancialService
             objToUpdate.DueDate = new DateTime(objToUpdate.DueDate.Year, objToUpdate.DueDate.Month, objToUpdate.DueDate.Day, 3, 0, 0);
             objToUpdate.DueDateCode = Convert.ToInt32($"{request.DueDate.Year}{request.DueDate.Month.ToString().PadLeft(2, '0')}");
             objToUpdate.ChangedAt = CultureInfoHelper.GetDate();
+
+            if ((objToUpdate.Type == "D" || objToUpdate.Type == "C") && objToUpdate.Amount > 0)
+                objToUpdate.Amount = objToUpdate.Amount * -1;
 
             await _financialRepository.UpdateAsync(objToUpdate);
             await _unitOfWork.CommitAsync();

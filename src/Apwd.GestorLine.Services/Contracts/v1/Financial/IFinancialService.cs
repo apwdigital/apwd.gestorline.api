@@ -6,7 +6,7 @@ public interface IFinancialService
 {
     Task<FinancialGetResponse> GetAsync(FinancialGetRequest request);
     Task<FinancialResponse> GetById(string id);
-    Task<FinancialGetInfoResponse> GetInfoAsync(string CompanyCode);    
+    Task<FinancialGetInfoResponse> GetInfoAsync(string CompanyCode);
     Task<FinancialResponse> Add(FinancialPostRequest request);
     Task<FinancialResponse> Duplicate(FinancialResponse financialData);
     Task<List<FinancialMonthlySummariesModel>> GetSummary(string CompanyCode, string year, string month, int quantity);

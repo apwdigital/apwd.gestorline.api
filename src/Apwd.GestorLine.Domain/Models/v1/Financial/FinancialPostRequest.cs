@@ -4,6 +4,7 @@ public class FinancialPostRequest
 {
     public required string CompanyCode { get; set; }
     public required string Type { get; set; }
+    public required string Recurrence { get; set; }
     public required string CategoryCode { get; set; }
     public required string Category { get; set; }
     public required string AccountCode { get; set; }

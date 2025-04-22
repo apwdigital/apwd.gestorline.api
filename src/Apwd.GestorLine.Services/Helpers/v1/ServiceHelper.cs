@@ -53,5 +53,5 @@ public static class ServiceHelper
         a[0] = char.ToUpper(a[0]);
 
         return new string(a);
-    }   
+    }
 }

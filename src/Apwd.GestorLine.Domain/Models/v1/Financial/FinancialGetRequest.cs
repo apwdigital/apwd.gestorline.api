@@ -12,5 +12,5 @@ public class FinancialGetRequest
     public string? Description { get; set; }
     public string? Year { get; set; }
     public string? Month { get; set; }
-    public int Quantity { get; set; }    
+    public int Quantity { get; set; }
 }

@@ -5,6 +5,7 @@ namespace Apwd.GestorLine.Domain.Entities.v1.Financial;
 public class Financial : BaseEntity
 {
     public required string Type { get; set; }
+    public string? Recurrence { get; set; }
     public required string CategoryCode { get; set; }
     public required string Category { get; set; }
     public required string AccountCode { get; set; }

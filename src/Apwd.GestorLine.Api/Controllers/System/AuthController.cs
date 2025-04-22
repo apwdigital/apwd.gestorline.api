@@ -44,10 +44,11 @@ public class AuthController : ControllerBase
         return new
         {
             username = user.UserName,
+            fullName = user.FullName,
             companyCode = user.CompanyCode,
             siteCodeInformation = user.Id,
             siteCodeValidation = AppHelper.GetAccountLevelCode(user.AccountLevel),
-            appVersion = "V25.3.27",
+            appVersion = "V25.4.22",
             token,
             createdDate,
             changedDate = new DateTime(createdDate.Year, createdDate.Month, createdDate.Day, 0, 0, 0),

@@ -20,7 +20,7 @@ public class UserService : IUserService
         _mapper = mapper;
     }
 
-    public async Task<UserModel> GetLogin(UserLoginModel obj) 
+    public async Task<UserModel> GetLogin(UserLoginModel obj)
         => _mapper.Map<UserModel>(await _userRepository.GetLoginAsync(obj));
 
     public async Task<UserModel> Add(AddUserModel obj)

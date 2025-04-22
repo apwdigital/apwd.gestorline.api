@@ -5,6 +5,7 @@ public class FinancialResponse
     public required string Id { get; set; }
     public required string CompanyCode { get; set; }
     public required string Type { get; set; }
+    public string? Recurrence { get; set; }
     public required string CategoryCode { get; set; }
     public required string Category { get; set; }
     public required string AccountCode { get; set; }
