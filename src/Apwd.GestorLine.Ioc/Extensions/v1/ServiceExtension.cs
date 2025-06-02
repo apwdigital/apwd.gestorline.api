@@ -1,5 +1,7 @@
-﻿using Apwd.GestorLine.Services.Contracts.v1.Financial;
+﻿using Apwd.GestorLine.Services.Contracts.v1.BusinessOverview;
+using Apwd.GestorLine.Services.Contracts.v1.Financial;
 using Apwd.GestorLine.Services.Contracts.v1.System;
+using Apwd.GestorLine.Services.Services.v1.BusinessOverview;
 using Apwd.GestorLine.Services.Services.v1.Financial;
 using Apwd.GestorLine.Services.Services.v1.System;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +14,8 @@ public static class ServiceExtension
     {
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IFinancialService, FinancialService>();
+        services.AddScoped<IDailyBillingService, DailyBillingService>();
+        services.AddScoped<IMonthlyDataService, MonthlyDataService>();
 
         return services;
     }

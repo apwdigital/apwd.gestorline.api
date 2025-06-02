@@ -12,6 +12,7 @@ public static class MappingExtension
         {
             cfg.AddProfile(new UserProfile());
             cfg.AddProfile(new FinancialProfile());
+            cfg.AddProfile(new BusinessOverviewProfile());
         });
         services.AddSingleton(c => mapper.CreateMapper());
 

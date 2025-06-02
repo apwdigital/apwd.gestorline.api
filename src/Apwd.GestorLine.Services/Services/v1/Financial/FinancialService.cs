@@ -7,6 +7,7 @@ using Apwd.GestorLine.MongoDb.Contracts.v1.System;
 using Apwd.GestorLine.Services.Contracts.v1.Financial;
 using Apwd.GestorLine.Services.Helpers.v1;
 using AutoMapper;
+using System.Diagnostics;
 
 namespace Apwd.GestorLine.Services.Services.v1.Financial;
 
@@ -221,5 +222,58 @@ public class FinancialService : IFinancialService
         await _financialInfoRepository.AddAsync(objToAdd);
         await _unitOfWork.CommitAsync();
         return _mapper.Map<FinancialGetInfoResponse>(objToAdd);
+    }
+
+    public async Task<FinancialGetResponse> GetMonthDuplicateAsync(FinancialGetRequest request)
+    {
+        var lista = _mapper.Map<IEnumerable<FinancialResponse>>(await _financialRepository.GetFinancialAsync(request));
+
+        //processo de duplicação
+        foreach (var item in lista)
+        {
+            var objToAdd = new FinancialPostRequest
+            {
+                CompanyCode = item.CompanyCode,
+                Type = item.Type,
+                Recurrence = item.Recurrence != null ? item.Recurrence : "",
+                CategoryCode = item.CategoryCode,
+                Category = item.Category,
+                AccountCode = item.AccountCode,
+                Account = item.Account,
+                ContactCode = item.ContactCode,
+                Contact = item.Contact,
+                PaymentTypeCode = item.PaymentTypeCode,
+                PaymentType = item.PaymentType,
+                Amount = item.Amount,
+                DocumentNumber = item.DocumentNumber,
+                Description = item.Description,
+                EmittentDate = Convert.ToDateTime(item.EmittentDate),
+                DueDate = Convert.ToDateTime(item.DueDate).AddMonths(1),
+                PayDate = null,
+                PlanningType = item.PlanningType,
+                Comments = item.Comments,
+                Sequence = item.Sequence,
+                ChangedAt = DateTime.Now
+            };
+
+            Debug.WriteLine($"Duplicando {item.DueDate} | {item.Account}");
+            try
+            {
+                Thread.Sleep(5);
+                await Add(objToAdd);
+                Debug.Write($" ... OK");
+            }
+            catch (Exception ex)
+            {
+                Debug.Write($" ... ERRO {ex.Message.Substring(0, 15)}");
+            }
+            Debug.WriteLine($"-------------------------------------------------------------");
+        }
+
+        return new FinancialGetResponse()
+        {
+            FinancialData = new List<FinancialResponse>(),
+            PreviousBalance = 0
+        };
     }
 }

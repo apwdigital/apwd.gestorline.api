@@ -73,4 +73,11 @@ public class FinancialController : ControllerBase
     [HttpPost("info")]
     public async Task<FinancialGetInfoResponse> AddInfo(FinancialInfoPostRequest request)
        => await _financialService.AddInfoAsync(request);
+
+    [HttpGet("monthduplicate")]
+    public async Task<IActionResult> GetDuplicarMes([FromQuery] FinancialGetRequest request)
+    {
+        var financialDataList = await _financialService.GetMonthDuplicateAsync(request);
+        return Ok(financialDataList);
+    }
 }

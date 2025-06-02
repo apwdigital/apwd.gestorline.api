@@ -14,4 +14,5 @@ public interface IFinancialService
     Task<int> UpdateCategory(FinancialResponse request);
     Task<int> Delete(string id);
     Task<FinancialGetInfoResponse> AddInfoAsync(FinancialInfoPostRequest request);
+    Task<FinancialGetResponse> GetMonthDuplicateAsync(FinancialGetRequest request);
 }
